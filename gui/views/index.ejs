@@ -4,23 +4,24 @@
         <meta charset="utf-8">
         <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
         <title><%= title %></title>
-        <link rel='stylesheet' href='/css/bootstrap.min.css' />
         <link rel='stylesheet' href='/stylesheets/style.css' />
-        <script src="/js/jquery.js"></script>
-        <script src="/js/bootstrap.min.js"></script> 
+        <link rel='stylesheet' href='/css/bootstrap.css' />
+        <script src="/js/jquery.min.js"></script>
     </head>
     <body>
-        <%- include('header') %>
+        <% include header.ejs %>
         <h1><%= title %></h1>
         <p>Welcome to <%= title %></p>
         <div id="dropin" class="container-fluid">
             <div class="row">
-                <div class="col-1">REPOSITORY</div>
-                <div class="col-1">TAG</div>
-                <div class="col-1">IMAGE ID</div>
+                <div class="col-2 text-nowrap">REPOSITORY</div>
+                <div class="col-1 text-nowrap">TAG</div>
+                <div class="col-2 text-nowrap">IMAGE ID</div>
+                <div class="col-1 text-nowrap">CREATED</div>
+                <div class="col-1 text-nowrap">SIZE</div>
             </div>
         </div>
-        <%- include('footer') %>
+        <% include footer.ejs %>
         <script>
             $(function() {
                 $.ajax({
@@ -29,17 +30,22 @@
                     success: function (result) {
                         // REPOSITORY-TAG-IMAGE ID-CREATED-SIZE
                         var c = result.images.length;
-                        c = 0;
                         for (var i = 0; i < c; i++) {
                             $('#dropin').append(
                                 '<div class="row">'+
-                                '<div class="col-1">'+result.images[i][1]+'</div>'+
-                                '<div class="col-1">'+result.images[i][2]+'</div>'+
+                                '<div class="col-2 text-nowrap">'+result.images[i][1]+'</div>'+
+                                '<div class="col-1 text-nowrap">'+result.images[i][2]+'</div>'+
+                                '<div class="col-2 text-nowrap">'+result.images[i][3]+'</div>'+
+                                '<div class="col-1 text-nowrap">'+result.images[i][4]+'</div>'+
+                                '<div class="col-1 text-nowrap">'+result.images[i][5]+'</div>'+
+                                '<div class="col-1 text-nowrap"><span class="glyphicon glyphicon-remove"></span></div>'+
                                 '</div>');
                         }
                     }
                 });
             });
         </script>
+        <script src="/js/popper.min.js"></script> 
+        <script src="/js/bootstrap.min.js"></script> 
     </body>
 </html>
