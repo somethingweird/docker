@@ -17,16 +17,13 @@
             <div class="row">
                 <div class="col-2 text-nowrap text-truncate">REPOSITORY</div>
                 <div class="col-1 text-nowrap text-truncate">TAG</div>
-                <div class="col-2 text-nowrap text-truncate">IMAGE ID</div>
-                <div class="col-1 text-nowrap text-truncate">CREATED</div>
-                <div class="col-1 text-nowrap text-truncate">SIZE</div>
             </div>
         </div>
         <% include footer.ejs %>
         <script>
             $(function() {
                 $.ajax({
-                    url: '/docker/images',
+                    url: '/docker/volumes',
                     dataType: 'json',
                     success: function (result) {
                         // REPOSITORY-TAG-IMAGE ID-CREATED-SIZE
@@ -36,9 +33,6 @@
                                 '<div class="row">'+
                                 '<div class="col-2 text-nowrap text-truncate">'+result.images[i][1]+'</div>'+
                                 '<div class="col-1 text-nowrap text-truncate">'+result.images[i][2]+'</div>'+
-                                '<div class="col-2 text-nowrap text-truncate">'+result.images[i][3]+'</div>'+
-                                '<div class="col-1 text-nowrap text-truncate">'+result.images[i][4]+'</div>'+
-                                '<div class="col-1 text-nowrap text-truncate">'+result.images[i][5]+'</div>'+
                                 '<div class="col-1 text-nowrap text-truncate">'+
                                     '<a href=""><span class="oi oi-cloud-download"></span></a> '+
                                     '<a href=""><span class="oi oi-trash"></span></a> '+
