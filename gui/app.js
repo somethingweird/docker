@@ -27,10 +27,6 @@ app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
 
 app.use('/', index);
-app.use('/js',  express.static(__dirname + '/node_modules/jquery/dist/'));
-app.use('/js',  express.static(__dirname + '/node_modules/bootstrap/dist/js'));
-app.use('/js',  express.static(__dirname + '/node_modules/popper.js/dist'));
-app.use('/css', express.static(__dirname + '/node_modules/bootstrap/dist/css'));
 app.use('/font', express.static(__dirname + '/node_modules/open-iconic/font'));
 app.use('/docker/images', images);
 app.use('/docker/volume', volume);
