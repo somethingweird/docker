@@ -38,6 +38,9 @@
                     <div class="row">
                         <div class="col-2 text-nowrap text-truncate">DRIVER</div>
                         <div class="col-2 text-nowrap text-truncate">VOLUME NAME</div>
+                        <div class="col-2 text-nowrap text-truncate">SCOPE</div>
+                        <div class="col-2 text-nowrap text-truncate">MOUNT POINT</div>
+                        <div class="col-2 text-nowrap text-truncate">LABEL</div>
                     </div>
                 </div>
             </div>
@@ -55,8 +58,11 @@
                         var c = result.images.length;
                         for (var i = 0; i < c; i++) {
                             $('#docker_volume').append('<div class="row">'+
+                                '<div class="col-2 text-nowrap text-truncate">'+result.images[i][0]+'</div>'+
                                 '<div class="col-2 text-nowrap text-truncate">'+result.images[i][1]+'</div>'+
                                 '<div class="col-2 text-nowrap text-truncate">'+result.images[i][2]+'</div>'+
+                                '<div class="col-2 text-nowrap text-truncate">'+result.images[i][3]+'</div>'+
+                                '<div class="col-2 text-nowrap text-truncate">'+result.images[i][4]+'</div>'+
                             '</div>');
                         }
                     }
@@ -77,6 +83,7 @@
                                 '<div class="col-2 text-nowrap text-truncate">'+result.images[i][2]+'</div>'+
                                 '<div class="col-2 text-nowrap text-truncate">'+result.images[i][3]+'</div>'+
                                 '<div class="col-2 text-nowrap text-truncate">'+result.images[i][4]+'</div>'+
+                                '<div class="col-2 text-nowrap text-truncate"><span class="oi oi-media-play"></span> <span class="oi oi-media-stop"></span> <span class="oi oi-media-pause"></span> <span class="oi oi-trash"></span></div>'+
                             '</div>');
                         }
                     }
@@ -111,6 +118,7 @@
             };
             $('#tab_image').on('click', function () {docker_images()});
             $('#tab_ps').on('click', function () {docker_ps()});
+            $('#tab_volume').on('click', function () {docker_volume()});
             $(function () {
                 docker_images();
             });
