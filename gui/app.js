@@ -6,11 +6,12 @@ var cookieParser = require('cookie-parser');
 var bodyParser = require('body-parser');
 
 var index = require('./routes/index');
-var users = require('./routes/users');
 
 var images = require('./routes/images/index');
 var volume = require('./routes/volume/index');
 var process = require('./routes/ps/index');
+var network = require('./routes/network/index');
+var rm = require('./routes/rm/index');
 
 var app = express();
 
@@ -31,7 +32,8 @@ app.use('/font', express.static(__dirname + '/node_modules/open-iconic/font'));
 app.use('/docker/images', images);
 app.use('/docker/volume', volume);
 app.use('/docker/ps', process);
-app.use('/users', users);
+app.use('/docker/network', network);
+app.use('/docker/rm', rm);
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {
