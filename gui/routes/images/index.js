@@ -5,19 +5,16 @@ var shell = require('child_process');
 
 /* GET home page. */
 router.get('/', function(req, res, next) {
-    shell.execFile('docker', ['images'], function (error, stdout, stderr) {
-        var g = stdout.split("\n");
-        var s = g.join('<br>');
+    // docker images --format "{{.Repository}}\t{{.Tag}}\t{{.ID}}\t{{.CreatedAt}}\t{{.Size}}"
+
+    shell.execFile('docker', ['images', '--format', '{{.Repository}}\t{{.Tag}}\t{{.ID}}\t{{.CreatedAt}}\t{{.Size}}'], function (error, stdout, stderr) {
         // REPOSITORY-TAG-IMAGE ID-CREATED-SIZE
-        var a = g.length;
-        var regex = /^(\S+)\s+(\S+)\s+(\S+)\s+(\d+\s\S+\s\S+)\s+(\S+)$/;
+        var rows = stdout.split("\n");
+        var a = rows.length - 1;
         var d = [];
         for (var i = 0; i < a; i++) {
             // parse each one into it own cell
-            var buffer = regex.exec(g[i]);
-            if (buffer instanceof Array) {
-                d.push(regex.exec(g[i]));
-            }
+                d.push(rows[i].split("\t"));
         }
         res.json({images: d});
     });

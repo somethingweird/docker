@@ -7,7 +7,10 @@ var bodyParser = require('body-parser');
 
 var index = require('./routes/index');
 var users = require('./routes/users');
+
 var images = require('./routes/images/index');
+var volume = require('./routes/volume/index');
+var process = require('./routes/ps/index');
 
 var app = express();
 
@@ -28,7 +31,10 @@ app.use('/js',  express.static(__dirname + '/node_modules/jquery/dist/'));
 app.use('/js',  express.static(__dirname + '/node_modules/bootstrap/dist/js'));
 app.use('/js',  express.static(__dirname + '/node_modules/popper.js/dist'));
 app.use('/css', express.static(__dirname + '/node_modules/bootstrap/dist/css'));
+app.use('/font', express.static(__dirname + '/node_modules/open-iconic/font'));
 app.use('/docker/images', images);
+app.use('/docker/volume', volume);
+app.use('/docker/ps', process);
 app.use('/users', users);
 
 // catch 404 and forward to error handler

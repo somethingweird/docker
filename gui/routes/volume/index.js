@@ -4,7 +4,7 @@ var router = express.Router();
 var shell = require('child_process');
 
 /* GET home page. */
-router.get('/volume/ls', function(req, res, next) {
+router.get('/ls', function(req, res, next) {
     shell.execFile('docker', ['volume', 'ls'], function (error, stdout, stderr) {
         var g = stdout.split("\n");
         var s = g.join('<br>');
