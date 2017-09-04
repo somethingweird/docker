@@ -23,6 +23,38 @@
                     </div>
                 </div>
             </div>
+
+            <div class="tab-pane" id="run" role="tabpanel">
+                <form>
+                <div id="docker_run" class="container-fluid">
+                    <div class="row">
+                        <label for="image" class="col-1 col-form-label">Image:</label>
+                        <div class="col-2 text-nowrap text-truncate">
+                            <select class="form-control" id="image">
+                                <option hidden>Select One</option>
+                                <option value="Example1">Example 1</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <label for="network" class="col-1 col-form-label">Network:</label>
+                        <div class="col-2 text-nowrap text-truncate"><select id="network" class="form-control"><option value="">Default</option></select></div>
+                    </div>
+                    <div class="row">
+                        <div class="col-1 text-nowrap text-truncate"><input class="form-control" type="checkbox" id="rm"></div>
+                        <label for="rm" class="col-3 form-check-label">Remove process when exited</label>
+                    </div>
+                    <div class="row">
+                        <div class="col-1 text-nowrap text-truncate"><input class="form-control" type="checkbox" id="privileges"></div>
+                        <label for="privileges" class="col-3 form-check-label">Give extended privileges to this container</label>
+                    </div>
+                    <div class="row">
+                        <div class="col-1 text-nowrap text-truncate"><button type="button" class="btn btn-primary">Run</button></div>
+                    </div>
+                </div>
+                </form>
+            </div>
+
             <div class="tab-pane" id="process" role="tabpanel">
                 <div id="docker_ps" class="container-fluid">
                     <div class="row">
@@ -119,14 +151,21 @@
                     cache: true,
                     success: function (result) {
                         var c = result.images.length;
-                        var regex = /^Exited \(0\)/;
+                        var exit_regex = /^Exited \(0\)/;
+                        var up_regex = /^Up /;
                         for (var i = 0; i < c; i++) {
                             var warning = '';
                             var icon = '<span class="oi oi-reload"></span> <span class="oi oi-media-play"></span> <span class="oi oi-media-stop"></span> <span class="oi oi-media-pause"></span> <span class="oi oi-trash"></span>'
-                            if (regex.test(result.images[i][6])) {
-                                warning = 'alert-danger';
+                            if (exit_regex.test(result.images[i][6])) {
+                                warning = 'alert alert-danger';
                                 icon = '<span class="oi oi-reload"></span> <a href="#" class="process_kill"><span class="oi oi-trash"></span></a>';
-                            }
+                            };
+
+                            if (up_regex.test(result.images[i][6])) {
+                                warning = 'alert alert-success';
+                                icon = '<a href=""><span class="oi oi-reload"></span></a> <a href=""><span class="oi oi-media-stop"></span></a> <a href=""><span class="oi oi-media-pause"></span></a></span>'
+                            };
+
                             $('#docker_ps').append('<div class="row '+warning+'">'+
                                 '<div class="col-1 text-nowrap text-truncate">'+result.images[i][0]+'</div>'+
                                 '<div class="col-1 text-nowrap text-truncate">'+result.images[i][1]+'</div>'+
@@ -187,7 +226,7 @@
                     cache: true,
                     success: function (result) {
                         if (result.success) {
-                            alert('successful');
+                            // successful
                         }
                         docker_ps();
                     }

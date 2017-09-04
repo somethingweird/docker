@@ -12,6 +12,8 @@ var volume = require('./routes/volume/index');
 var process = require('./routes/ps/index');
 var network = require('./routes/network/index');
 var rm = require('./routes/rm/index');
+var stop = require('./routes/stop/index');
+var pause = require('./routes/pause/index');
 
 var app = express();
 
@@ -34,6 +36,8 @@ app.use('/docker/volume', volume);
 app.use('/docker/ps', process);
 app.use('/docker/network', network);
 app.use('/docker/rm', rm);
+app.use('/docker/stop', stop);
+app.use('/docker/pause', pause);
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {
