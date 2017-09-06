@@ -30,7 +30,7 @@
                     <div class="row">
                         <label for="image" class="col-1 col-form-label">Image:</label>
                         <div class="col-2 text-nowrap text-truncate">
-                            <select class="form-control" id="image">
+                            <select class="form-control" id="run_image">
                                 <option hidden>Select One</option>
                                 <option value="Example1">Example 1</option>
                             </select>
@@ -38,7 +38,7 @@
                     </div>
                     <div class="row">
                         <label for="network" class="col-1 col-form-label">Network:</label>
-                        <div class="col-2 text-nowrap text-truncate"><select id="network" class="form-control"><option value="">Default</option></select></div>
+                        <div class="col-2 text-nowrap text-truncate"><select id="run_network" class="form-control"><option value="">Default</option></select></div>
                     </div>
                     <div class="row">
                         <div class="col-1 text-nowrap text-truncate"><input class="form-control" type="checkbox" id="rm"></div>
@@ -100,6 +100,9 @@
         </div>
         <% include footer.ejs %>
         <script>
+            var imageTag = {};
+            var networkTag = {};
+
             function docker_network() {
                 $('#docker_network .row').not('.row:first').remove();
                 $.ajax({
@@ -197,7 +200,9 @@
                     success: function (result) {
                         // REPOSITORY-TAG-IMAGE ID-CREATED-SIZE
                         var c = result.images.length;
+                        imageTab = {};
                         for (var i = 0; i < c; i++) {
+                            imageTab[result.images[i][2]] = result.images[i][0]+':'+result.images[i][1];
                             $('#dropin').append(
                                 '<div class="row">'+
                                 '<div class="col-2 text-nowrap text-truncate">'+result.images[i][0]+'</div>'+
@@ -210,14 +215,34 @@
                                     '<a href=""><span class="oi oi-trash"></span></a> '+
                                 '</div>'+
                                 '</div>');
-                        }
+                        };
                     }
                 });
             };
+
+            function docker_run() {
+                // run_image
+                // Assume that we already got a list of images because that was run by default
+                $('#run_image option').not(':first').remove();
+                for (var k in imageTab) {
+                    if (imageTab.hasOwnProperty(k)) {
+                        $('#run_image').append($('<option>', {value: k, text: imageTab[k]}));
+                    }
+                };
+                // list of network - no guarrentee - so it need to be checked if not run docker_network;
+                for (var k in networkTab) {
+                    if (networkTab.hasOwnProperty(k)) {
+                        $('#run_network').append($('<option>', {value: k, text: networkTab[k]}));
+                    }
+                }
+
+            };
+
             $('#tab_image').on('click', function () {docker_images()});
             $('#tab_ps').on('click', function () {docker_ps()});
             $('#tab_volume').on('click', function () {docker_volume()});
             $('#tab_network').on('click', function () {docker_network()});
+            $('#tab_run').on('click', function () {docker_run()});
 
             $('#docker_ps').on('click', '.process_kill', function () {
                 $.ajax({
