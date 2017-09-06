@@ -200,7 +200,7 @@
             function docker_images() {
                 $('#dropin .row').not('.row:first').remove();
                 $.ajax({
-                    url: '/docker/images',
+                    url: '/docker/images/beta',
                     dataType: 'json',
                     cache: true,
                     success: function (result) {
@@ -208,14 +208,14 @@
                         var c = result.images.length;
                         imageTab = {};
                         for (var i = 0; i < c; i++) {
-                            imageTab[result.images[i][2]] = result.images[i][0]+':'+result.images[i][1];
+                            imageTab[result.images[i]['ID']] = result.images[i]['Repository']+':'+result.images[i]['Tag'];
                             $('#dropin').append(
                                 '<div class="row">'+
-                                '<div class="col-2 text-nowrap text-truncate">'+result.images[i][0]+'</div>'+
-                                '<div class="col-1 text-nowrap text-truncate">'+result.images[i][1]+'</div>'+
-                                '<div class="col-2 text-nowrap text-truncate">'+result.images[i][2]+'</div>'+
-                                '<div class="col-2 text-nowrap text-truncate">'+result.images[i][3]+'</div>'+
-                                '<div class="col-1 text-nowrap text-truncate">'+result.images[i][4]+'</div>'+
+                                '<div class="col-2 text-nowrap text-truncate">'+result.images[i]['Repository']+'</div>'+
+                                '<div class="col-1 text-nowrap text-truncate">'+result.images[i]['Tag']+'</div>'+
+                                '<div class="col-2 text-nowrap text-truncate">'+result.images[i]['ID']+'</div>'+
+                                '<div class="col-2 text-nowrap text-truncate">'+result.images[i]['CreatedSince']+'</div>'+
+                                '<div class="col-1 text-nowrap text-truncate">'+result.images[i]['Size']+'</div>'+
                                 '<div class="col-1 text-nowrap text-truncate">'+
                                     '<a href=""><span class="oi oi-cloud-download"></span></a> '+
                                     '<a href=""><span class="oi oi-trash"></span></a> '+
