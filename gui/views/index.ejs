@@ -155,7 +155,7 @@
             function docker_ps() {
                 $('#docker_ps .row').not('.row:first').remove();
                 $.ajax({
-                    url: '/docker/ps/all',
+                    url: '/docker/ps/all/',
                     dataType: 'json',
                     cache: true,
                     success: function (result) {
@@ -165,32 +165,28 @@
                         for (var i = 0; i < c; i++) {
                             var warning = '';
                             var icon = '<span class="oi oi-reload"></span> <span class="oi oi-media-play"></span> <span class="oi oi-media-stop"></span> <span class="oi oi-media-pause"></span> <span class="oi oi-trash"></span>'
-                            if (exit_regex.test(result.images[i][6])) {
+                            if (exit_regex.test(result.images[i]['Status'])) {
                                 warning = 'alert alert-danger';
                                 icon = '<span title="reload" class="oi oi-reload"></span> <a href="#" class="process_kill"><span title="remove" class="oi oi-trash"></span></a>';
                             };
 
-                            if (up_regex.test(result.images[i][6])) {
+                            if (up_regex.test(result.images[i]['Status'])) {
                                 warning = 'alert alert-success';
                                 icon = '<a href=""><span title="reload" class="oi oi-reload"></span></a> <a href=""><span title="stop" class="oi oi-media-stop"></span></a> <a href=""><span title="suspend" class="oi oi-media-pause"></span></a></span>'
                             };
 
                             $('#docker_ps').append('<div class="row '+warning+'">'+
-                                '<div class="col-1 text-nowrap text-truncate"><span title="'+result.images[i][0]+'">'+result.images[i][0]+'</span></div>'+
-                                '<div class="col-1 text-nowrap text-truncate"><span title="'+result.images[i][1]+'">'+result.images[i][1]+'</span></div>'+
-                                '<div class="col-1 text-nowrap text-truncate"><span title="">'+result.images[i][2]+'</span></div>'+
-                                // CREATE_AT
-                                // '<div class="col-1 text-nowrap text-truncate">'+result.images[i][3]+'</div>'+
-                                '<div class="col-1 text-nowrap text-truncate"><span title="'+result.images[i][4]+'">'+result.images[i][4]+'</span></div>'+
-                                '<div class="col-1 text-nowrap text-truncate"><span title="'+result.images[i][5]+'">'+result.images[i][5]+'</span></div>'+
-                                '<div class="col-1 text-nowrap text-truncate"><span title="'+result.images[i][6]+'"'+result.images[i][6]+'</span></div>'+
-                                // SIZE
-                                // '<div class="col-1 text-nowrap text-truncate">'+result.images[i][7]+'</div>'+
-                                '<div class="col-1 text-nowrap text-truncate"><span title="'+result.images[i][8]+'">'+result.images[i][8]+'</span></div>'+
-                                '<div class="col-1 text-nowrap text-truncate"><span title="'+result.images[i][9]+'">'+result.images[i][9]+'</span></div>'+
-                                '<div class="col-1 text-nowrap text-truncate"><span title="'+result.images[i][10]+'">'+result.images[i][10]+'</span></div>'+
-                                '<div class="col-1 text-nowrap text-truncate"><span title="'+result.images[i][11]+'">'+result.images[i][11]+'</span></div>'+
-                                '<div class="col-1 text-nowrap text-truncate" data-id="'+result.images[i][0]+'">'+icon+'</div>'+
+                                '<div class="col-1 text-nowrap text-truncate"><span title="'+result.images[i]['ID']+'">'+result.images[i]['ID']+'</span></div>'+
+                                '<div class="col-1 text-nowrap text-truncate"><span title="'+result.images[i]['Image']+'">'+result.images[i]['Image']+'</span></div>'+
+                                '<div class="col-1 text-nowrap text-truncate"><span title="">'+result.images[i]['Command']+'</span></div>'+
+                                '<div class="col-1 text-nowrap text-truncate"><span title="'+result.images[i]['RunningFor']+'">'+result.images[i]['RunningFor']+'</span></div>'+
+                                '<div class="col-1 text-nowrap text-truncate"><span title="'+result.images[i]['Ports']+'">'+result.images[i]['Ports']+'</span></div>'+
+                                '<div class="col-1 text-nowrap text-truncate"><span title="'+result.images[i]['Status']+'"'+result.images[i]['Status']+'</span></div>'+
+                                '<div class="col-1 text-nowrap text-truncate"><span title="'+result.images[i]['Names']+'">'+result.images[i]['Names']+'</span></div>'+
+                                '<div class="col-1 text-nowrap text-truncate"><span title="'+result.images[i]['Labels']+'">'+result.images[i]['Labels']+'</span></div>'+
+                                '<div class="col-1 text-nowrap text-truncate"><span title="'+result.images[i]['Mounts']+'">'+result.images[i]['Mounts']+'</span></div>'+
+                                '<div class="col-1 text-nowrap text-truncate"><span title="'+result.images[i]['Networks']+'">'+result.images[i]['Networks']+'</span></div>'+
+                                '<div class="col-1 text-nowrap text-truncate" data-id="'+result.images[i]['ID']+'">'+icon+'</div>'+
                             '</div>');
                         }
                     }
@@ -200,7 +196,7 @@
             function docker_images() {
                 $('#dropin .row').not('.row:first').remove();
                 $.ajax({
-                    url: '/docker/images/beta',
+                    url: '/docker/images/',
                     dataType: 'json',
                     cache: true,
                     success: function (result) {
