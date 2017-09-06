@@ -51,7 +51,7 @@
                         <label for="privileges" class="col-3 form-check-label">Give extended privileges to this container</label>
                     </div>
                     <div class="row">
-                        <div class="col-1 text-nowrap text-truncate"><button type="button" class="btn btn-primary">Run</button></div>
+                        <div class="col-1 text-nowrap text-truncate"><button id="execute_run" type="button" class="btn btn-primary">Run</button></div>
                     </div>
                 </div>
                 </form>
@@ -167,29 +167,29 @@
                             var icon = '<span class="oi oi-reload"></span> <span class="oi oi-media-play"></span> <span class="oi oi-media-stop"></span> <span class="oi oi-media-pause"></span> <span class="oi oi-trash"></span>'
                             if (exit_regex.test(result.images[i][6])) {
                                 warning = 'alert alert-danger';
-                                icon = '<span class="oi oi-reload"></span> <a href="#" class="process_kill"><span class="oi oi-trash"></span></a>';
+                                icon = '<span title="reload" class="oi oi-reload"></span> <a href="#" class="process_kill"><span title="remove" class="oi oi-trash"></span></a>';
                             };
 
                             if (up_regex.test(result.images[i][6])) {
                                 warning = 'alert alert-success';
-                                icon = '<a href=""><span class="oi oi-reload"></span></a> <a href=""><span class="oi oi-media-stop"></span></a> <a href=""><span class="oi oi-media-pause"></span></a></span>'
+                                icon = '<a href=""><span title="reload" class="oi oi-reload"></span></a> <a href=""><span title="stop" class="oi oi-media-stop"></span></a> <a href=""><span title="suspend" class="oi oi-media-pause"></span></a></span>'
                             };
 
                             $('#docker_ps').append('<div class="row '+warning+'">'+
-                                '<div class="col-1 text-nowrap text-truncate">'+result.images[i][0]+'</div>'+
-                                '<div class="col-1 text-nowrap text-truncate">'+result.images[i][1]+'</div>'+
-                                '<div class="col-1 text-nowrap text-truncate">'+result.images[i][2]+'</div>'+
+                                '<div class="col-1 text-nowrap text-truncate"><span title="'+result.images[i][0]+'">'+result.images[i][0]+'</span></div>'+
+                                '<div class="col-1 text-nowrap text-truncate"><span title="'+result.images[i][1]+'">'+result.images[i][1]+'</span></div>'+
+                                '<div class="col-1 text-nowrap text-truncate"><span title="">'+result.images[i][2]+'</span></div>'+
                                 // CREATE_AT
                                 // '<div class="col-1 text-nowrap text-truncate">'+result.images[i][3]+'</div>'+
-                                '<div class="col-1 text-nowrap text-truncate">'+result.images[i][4]+'</div>'+
-                                '<div class="col-1 text-nowrap text-truncate">'+result.images[i][5]+'</div>'+
-                                '<div class="col-1 text-nowrap text-truncate">'+result.images[i][6]+'</div>'+
+                                '<div class="col-1 text-nowrap text-truncate"><span title="'+result.images[i][4]+'">'+result.images[i][4]+'</span></div>'+
+                                '<div class="col-1 text-nowrap text-truncate"><span title="'+result.images[i][5]+'">'+result.images[i][5]+'</span></div>'+
+                                '<div class="col-1 text-nowrap text-truncate"><span title="'+result.images[i][6]+'"'+result.images[i][6]+'</span></div>'+
                                 // SIZE
                                 // '<div class="col-1 text-nowrap text-truncate">'+result.images[i][7]+'</div>'+
-                                '<div class="col-1 text-nowrap text-truncate">'+result.images[i][8]+'</div>'+
-                                '<div class="col-1 text-nowrap text-truncate">'+result.images[i][9]+'</div>'+
-                                '<div class="col-1 text-nowrap text-truncate">'+result.images[i][10]+'</div>'+
-                                '<div class="col-1 text-nowrap text-truncate">'+result.images[i][11]+'</div>'+
+                                '<div class="col-1 text-nowrap text-truncate"><span title="'+result.images[i][8]+'">'+result.images[i][8]+'</span></div>'+
+                                '<div class="col-1 text-nowrap text-truncate"><span title="'+result.images[i][9]+'">'+result.images[i][9]+'</span></div>'+
+                                '<div class="col-1 text-nowrap text-truncate"><span title="'+result.images[i][10]+'">'+result.images[i][10]+'</span></div>'+
+                                '<div class="col-1 text-nowrap text-truncate"><span title="'+result.images[i][11]+'">'+result.images[i][11]+'</span></div>'+
                                 '<div class="col-1 text-nowrap text-truncate" data-id="'+result.images[i][0]+'">'+icon+'</div>'+
                             '</div>');
                         }
@@ -237,7 +237,7 @@
                 };
                 // list of network - no guarrentee - so it need to be checked if not run docker_network;
                 if (typeof networkTab === 'undefined' || $.isEmptyObject(networkTab)) {
-                        docker_network({async: true});
+                        docker_network({async: false});
                 };
                 for (var k in networkTab) {
                     if (networkTab.hasOwnProperty(k)) {
@@ -250,8 +250,21 @@
             $('#tab_image').on('click', function () {docker_images()});
             $('#tab_ps').on('click', function () {docker_ps()});
             $('#tab_volume').on('click', function () {docker_volume()});
-            $('#tab_network').on('click', function () {docker_network({async:false})});
+            $('#tab_network').on('click', function () {docker_network({async:true})});
             $('#tab_run').on('click', function () {docker_run()});
+            $('#execute_run').on('click', function (e) {
+
+                e.preventDefault();
+                $.ajax({
+                    url: '/docker/run/'+$('#run_image').val(),
+                    dataType: 'json',
+                    cache: true,
+                    success: function (result) {
+                        console.log(result);
+                    }
+                })
+            });
+
             $('#docker_ps').on('click', '.process_kill', function () {
                 $.ajax({
                     url: '/docker/rm/'+$(this).parent().data('id'),

@@ -20,4 +20,13 @@ router.get('/', function(req, res, next) {
     });
 });
 
+// better way is now
+router.get('/beta', function(req, res, next) {
+    // docker images --format '{{json .}}' --no-trunc
+    shell.execFile('docker', ['images', '--format', '{{json .}}', '--no-trunc'], function (error, stdout, stderr) {
+        var rows = stdout.split("\n");
+        res.json({images: rows});
+    });
+});
+
 module.exports = router;

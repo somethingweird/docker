@@ -14,6 +14,7 @@ var network = require('./routes/network/index');
 var rm = require('./routes/rm/index');
 var stop = require('./routes/stop/index');
 var pause = require('./routes/pause/index');
+var run = require('./routes/run/index');
 
 var app = express();
 
@@ -38,6 +39,7 @@ app.use('/docker/network', network);
 app.use('/docker/rm', rm);
 app.use('/docker/stop', stop);
 app.use('/docker/pause', pause);
+app.use('/docker/run', run);
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {
