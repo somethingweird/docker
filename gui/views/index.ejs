@@ -27,19 +27,21 @@
             <div class="tab-pane" id="run" role="tabpanel">
                 <form>
                 <div id="docker_run" class="container-fluid">
+                    <div class="row">&nbsp;</div>
                     <div class="row">
                         <label for="image" class="col-1 col-form-label">Image:</label>
                         <div class="col-2 text-nowrap text-truncate">
                             <select class="form-control" id="run_image">
                                 <option hidden>Select One</option>
-                                <option value="Example1">Example 1</option>
                             </select>
                         </div>
                     </div>
+                    <div class="row">&nbsp;</div>
                     <div class="row">
                         <label for="network" class="col-1 col-form-label">Network:</label>
                         <div class="col-2 text-nowrap text-truncate"><select id="run_network" class="form-control"><option value="">Default</option></select></div>
                     </div>
+                    <div class="row">&nbsp;</div>
                     <div class="row">
                         <div class="col-1 text-nowrap text-truncate"><input class="form-control" type="checkbox" id="rm"></div>
                         <label for="rm" class="col-3 form-check-label">Remove process when exited</label>
@@ -103,15 +105,18 @@
             var imageTag = {};
             var networkTag = {};
 
-            function docker_network() {
+            function docker_network(params) {
                 $('#docker_network .row').not('.row:first').remove();
                 $.ajax({
                     url: '/docker/network/ls',
                     dataType: 'json',
                     cache: true,
+                    async: params.async,
                     success: function (result) {
                         var c = result.images.length;
+                        networkTab = {};
                         for (var i = 0; i < c; i++) {
+                            networkTab[result.images[i][0]] = result.images[i][1];
                             $('#docker_network').append('<div class="row">'+
                                 '<div class="col-1 text-nowrap text-truncate">'+result.images[i][0]+'</div>'+
                                 '<div class="col-1 text-nowrap text-truncate">'+result.images[i][1]+'</div>'+
@@ -125,6 +130,7 @@
                     }
                 })
             }
+
             function docker_volume() {
                 $('#docker_volume .row').not('.row:first').remove();
                 $.ajax({
@@ -230,6 +236,9 @@
                     }
                 };
                 // list of network - no guarrentee - so it need to be checked if not run docker_network;
+                if (typeof networkTab === 'undefined' || $.isEmptyObject(networkTab)) {
+                        docker_network({async: true});
+                };
                 for (var k in networkTab) {
                     if (networkTab.hasOwnProperty(k)) {
                         $('#run_network').append($('<option>', {value: k, text: networkTab[k]}));
@@ -241,9 +250,8 @@
             $('#tab_image').on('click', function () {docker_images()});
             $('#tab_ps').on('click', function () {docker_ps()});
             $('#tab_volume').on('click', function () {docker_volume()});
-            $('#tab_network').on('click', function () {docker_network()});
+            $('#tab_network').on('click', function () {docker_network({async:false})});
             $('#tab_run').on('click', function () {docker_run()});
-
             $('#docker_ps').on('click', '.process_kill', function () {
                 $.ajax({
                     url: '/docker/rm/'+$(this).parent().data('id'),
