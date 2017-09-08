@@ -1,5 +1,5 @@
 # Docker
-I started this project because I wanted to learn Docker.  In addition to learning Docker I get to practice Nodejs / Express.
+I started this project because I wanted to learn Docker.  In addition to learning Docker I get to practice Nodejs / Express / Bootstrap / Open-Iconic / JQuery
 
 ## Road Map
 Sept 2017 - get a simple prototype working by the end of the month.  Make a version number
