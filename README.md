@@ -4,7 +4,7 @@ I started this project because I wanted to learn Docker.  In addition to learnin
 ## Road Map
 Sept 2017 - get a simple prototype working by the end of the month.  Make a version number
 
-## ScreenShoot
+## ScreenShot
 ![Screen Shot Docker Image](https://raw.githubusercontent.com/somethingweird/docker/master/gui/screenshots/ScreenShot_DockerImage.png)
 ![Screen Shot Docker Network](https://raw.githubusercontent.com/somethingweird/docker/master/gui/screenshots/ScreenShot_DockerNetwork.png)
 ![Screen Shot Docker Process](https://raw.githubusercontent.com/somethingweird/docker/master/gui/screenshots/ScreenShot_DockerProcess.png)
