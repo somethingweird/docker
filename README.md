@@ -13,10 +13,11 @@ Sept 2017 - get a simple prototype working by the end of the month.  Make a vers
 
 ## To Do
 
-- websocket for docker stats - https://www.npmjs.com/package/express-ws
-- D3.js for nice data driven display eventually - https://d3js.org/
-- use ReactJS for forms? - https://facebook.github.io/react/
-- Always too much to do.
+- login / authentication with 2FA support (far future)
+- websocket for docker stats - https://www.npmjs.com/package/express-ws (far future)
+- D3.js for nice data driven display eventually - https://d3js.org/ (far future)
+- use ReactJS for forms? - https://facebook.github.io/react/ (far future)
+- Always too much to do. 
 
 ## Requirements
 
