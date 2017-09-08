@@ -161,6 +161,7 @@
                         var c = result.images.length;
                         var exit_regex = /^Exited \(0\)/;
                         var up_regex = /^Up /;
+                        var pause_regex = /^Up\s.+\s\(Paused\)$/;
                         for (var i = 0; i < c; i++) {
                             var warning = '';
                             var icon = '<span class="oi oi-reload"></span> <span class="oi oi-media-play"></span> <span class="oi oi-media-stop"></span> <span class="oi oi-media-pause"></span> <span class="oi oi-trash"></span>'
@@ -170,8 +171,13 @@
                             };
 
                             if (up_regex.test(result.images[i]['Status'])) {
-                                warning = 'alert alert-success';
-                                icon = '<a href="#" class="process_reload"><span title="reload" class="oi oi-reload"></span></a> <a href="#" class="process_stop"><span title="stop" class="oi oi-media-stop"></span></a> <a href="#" class="process_pause"><span title="suspend" class="oi oi-media-pause"></span></a></span>'
+                                if (pause_regex.test(result.images[i]['Status'])) {
+                                    warning = 'alert alert-warning';
+                                    icon = '<a href="#"><span title="play" class="oi oi-media-play"></span></a>';
+                                } else {
+                                    warning = 'alert alert-success';
+                                    icon = '<a href="#" class="process_reload"><span title="reload" class="oi oi-reload"></span></a> <a href="#" class="process_stop"><span title="stop" class="oi oi-media-stop"></span></a> <a href="#" class="process_pause"><span title="suspend" class="oi oi-media-pause"></span></a></span>';
+                                }
                             };
 
                             $('#docker_ps').append('<div class="row '+warning+'">'+
