@@ -8,6 +8,7 @@
         <link rel="stylesheet" href="/javascripts/bootstrap/css/bootstrap.min.css">
         <link rel='stylesheet' href='/font/css/open-iconic-bootstrap.css' />
         <script src="/javascripts/jquery/jquery-3.2.1.min.js"></script>
+        <script src="/javascripts/json2table/dist/jquery.jsontotable.min.js"></script>
     </head>
     <body>
         <% include header.ejs %>
@@ -63,11 +64,9 @@
                         <div class="col-1 text-nowrap text-truncate">CONTAINER ID</div>
                         <div class="col-1 text-nowrap text-truncate">IMAGE</div>
                         <div class="col-1 text-nowrap text-truncate">COMMAND</div>
-                        <!--div class="col-1 text-nowrap text-truncate">CREATED AT</div>-->
                         <div class="col-1 text-nowrap text-truncate">RUNNING FOR</div>
                         <div class="col-1 text-nowrap text-truncate">PORT</div>
                         <div class="col-1 text-nowrap text-truncate">STATUS</div>
-                        <!-- div class="col-1 text-nowrap text-truncate">SIZE</div -->
                         <div class="col-1 text-nowrap text-truncate">NAME</div>
                         <div class="col-1 text-nowrap text-truncate">LABEL</div>
                         <div class="col-1 text-nowrap text-truncate">MOUNT</div>
@@ -167,12 +166,12 @@
                             var icon = '<span class="oi oi-reload"></span> <span class="oi oi-media-play"></span> <span class="oi oi-media-stop"></span> <span class="oi oi-media-pause"></span> <span class="oi oi-trash"></span>'
                             if (exit_regex.test(result.images[i]['Status'])) {
                                 warning = 'alert alert-danger';
-                                icon = '<span title="reload" class="oi oi-reload"></span> <a href="#" class="process_kill"><span title="remove" class="oi oi-trash"></span></a>';
+                                icon = '<a href="#" class="process_reload"><span title="reload" class="oi oi-reload"></span></a> <a href="#" class="process_kill"><span title="remove" class="oi oi-trash"></span></a>';
                             };
 
                             if (up_regex.test(result.images[i]['Status'])) {
                                 warning = 'alert alert-success';
-                                icon = '<a href=""><span title="reload" class="oi oi-reload"></span></a> <a href=""><span title="stop" class="oi oi-media-stop"></span></a> <a href=""><span title="suspend" class="oi oi-media-pause"></span></a></span>'
+                                icon = '<a href="#" class="process_reload"><span title="reload" class="oi oi-reload"></span></a> <a href="#" class="process_stop"><span title="stop" class="oi oi-media-stop"></span></a> <a href="#" class="process_pause"><span title="suspend" class="oi oi-media-pause"></span></a></span>'
                             };
 
                             $('#docker_ps').append('<div class="row '+warning+'">'+
@@ -235,6 +234,7 @@
                 if (typeof networkTab === 'undefined' || $.isEmptyObject(networkTab)) {
                         docker_network({async: false});
                 };
+                $('#run_network option').not(':first').remove();
                 for (var k in networkTab) {
                     if (networkTab.hasOwnProperty(k)) {
                         $('#run_network').append($('<option>', {value: k, text: networkTab[k]}));
@@ -249,7 +249,6 @@
             $('#tab_network').on('click', function () {docker_network({async:true})});
             $('#tab_run').on('click', function () {docker_run()});
             $('#execute_run').on('click', function (e) {
-
                 e.preventDefault();
                 $.ajax({
                     url: '/docker/run/'+$('#run_image').val(),
@@ -259,6 +258,39 @@
                         console.log(result);
                     }
                 })
+            });
+
+            $('#docker_ps').on('click', '.process_stop', function () {
+                $.ajax({
+                    url: '/docker/stop/'+$(this).parent().data('id'),
+                    dataType: 'json',
+                    cache: true,
+                    success: function (result) {
+                        docker_ps();
+                    }
+                });
+            });
+
+            $('#docker_ps').on('click', '.process_pause', function () {
+                $.ajax({
+                    url: '/docker/pause/'+$(this).parent().data('id'),
+                    dataType: 'json',
+                    cache: true,
+                    success: function (result) {
+                        docker_ps();
+                    }
+                });
+            });
+
+            $('#docker_ps').on('click', '.process_reload', function () {
+                $.ajax({
+                    url: '/docker/restart/'+$(this).parent().data('id'),
+                    dataType: 'json',
+                    cache: true,
+                    success: function (result) {
+                        docker_ps();
+                    }
+                });
             });
 
             $('#docker_ps').on('click', '.process_kill', function () {
@@ -274,6 +306,7 @@
                     }
                 });
             });
+
             $(function () {
                 docker_images();
             });

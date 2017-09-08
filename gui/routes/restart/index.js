@@ -11,7 +11,7 @@ router.get('/:imageID', function(req, res, next) {
         if (imageID.indexOf('sha256:') > 0) {
             imageID = imageID.splice(7);
         };
-        shell.execFile('docker', ['run', '-d', imageID], function (error, stdout, stderr) {
+        shell.execFile('docker', ['restart', imageID], function (error, stdout, stderr) {
             if (stderr) {
                 res.json({success: false, message: error});
             } else {

@@ -15,6 +15,7 @@ var rm = require('./routes/rm/index');
 var stop = require('./routes/stop/index');
 var pause = require('./routes/pause/index');
 var run = require('./routes/run/index');
+var restart = require('./routes/restart/index');
 
 var app = express();
 
@@ -40,6 +41,7 @@ app.use('/docker/rm', rm);
 app.use('/docker/stop', stop);
 app.use('/docker/pause', pause);
 app.use('/docker/run', run);
+app.use('/docker/restart', restart);
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {
