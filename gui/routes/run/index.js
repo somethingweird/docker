@@ -23,7 +23,7 @@ router.get('/:imageID', function(req, res, next) {
     }
 });
 
-router.get('/:imageID/:networkID'), function(req, res, next) {
+router.get('/:imageID/:networkID', function(req, res, next) {
     var regex = /^(\w+|sha256:\w+)$/;
     if (regex.test(req.params.imageID) && regex.test(req.params.networkID)) {
         var imageID = req.params.imageID;
