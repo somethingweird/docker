@@ -12,8 +12,14 @@ Sept 2017 - get a simple prototype working by the end of the month.  Make a vers
 ![Screen Shot Docker Volume](https://raw.githubusercontent.com/somethingweird/docker/master/gui/screenshots/ScreenShot_DockerVolume.png)
 
 ## To Do
-Always too much.
+
+- websocket for docker stats - https://www.npmjs.com/package/express-ws
+- D3.js for nice data driven display eventually - https://d3js.org/
+- use ReactJS for forms? - https://facebook.github.io/react/
+- Always too much to do.
 
 ## Requirements
-1. nodejs
-2. docker (of course)
+
+1. nodejs - https://nodejs.org/en/
+2. docker - https://www.docker.com/
+3. pm2 - http://pm2.keymetrics.io/
