@@ -4,6 +4,7 @@ var router = express.Router();
 var shell = require('child_process');
 
 /* GET home page. */
+/*
 router.get('/ls', function(req, res, next) {
     // docker volume ls --format "{{.Driver}}\t{{.Name}}\t{{.Scope}}\t{{.Mountpoint}}\t{{.Labels}}"
     shell.execFile('docker', ['volume', 'ls', '--format', '{{.Driver}}\t{{.Name}}\t{{.Scope}}\t{{.Mountpoint}}\t{{.Labels}}'], function (error, stdout, stderr) {
@@ -18,11 +19,13 @@ router.get('/ls', function(req, res, next) {
         res.json({images: d});
     });
 });
+*/
 
-router.get('/ls/beta', function(req, res, next) {
-    shell.execFile('docker', ['volume', 'ls', '--format', '{{json .}}', '--no-trunc'], function (error, stdout, stderr) {
+router.get('/ls', function(req, res, next) {
+    shell.execFile('docker', ['volume', 'ls', '--format', '{{json .}}'], function (error, stdout, stderr) {
         var rows = stdout.split("\n");
         rows.pop();
+        console.log(rows);
         var j = rows.map(function(x) {
             return JSON.parse(x);
         });

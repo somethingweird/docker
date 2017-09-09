@@ -140,11 +140,11 @@
                         var c = result.images.length;
                         for (var i = 0; i < c; i++) {
                             $('#docker_volume').append('<div class="row">'+
-                                '<div class="col-2 text-nowrap text-truncate">'+result.images[i][0]+'</div>'+
-                                '<div class="col-2 text-nowrap text-truncate">'+result.images[i][1]+'</div>'+
-                                '<div class="col-2 text-nowrap text-truncate">'+result.images[i][2]+'</div>'+
-                                '<div class="col-2 text-nowrap text-truncate">'+result.images[i][3]+'</div>'+
-                                '<div class="col-2 text-nowrap text-truncate">'+result.images[i][4]+'</div>'+
+                                '<div class="col-2 text-nowrap text-truncate">'+result.images[i]['Driver']+'</div>'+
+                                '<div class="col-2 text-nowrap text-truncate">'+result.images[i]['Name']+'</div>'+
+                                '<div class="col-2 text-nowrap text-truncate">'+result.images[i]['Scope']+'</div>'+
+                                '<div class="col-2 text-nowrap text-truncate">'+result.images[i]['Mountpoint']+'</div>'+
+                                '<div class="col-2 text-nowrap text-truncate">'+result.images[i]['Labels']+'</div>'+
                             '</div>');
                         }
                     }
