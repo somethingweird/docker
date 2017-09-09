@@ -84,6 +84,10 @@
                         <div class="col-2 text-nowrap text-truncate">LABEL</div>
                     </div>
                 </div>
+                <div class="row">&nbsp</div>
+                <div class="row">
+                    <div class="col"><button id="volume_pruneAll" type="button" class="btn btn-primary">Prune All</button></div>
+                </div>
             </div>
             <div class="tab-pane" id="network" role="tabpanel">
                 <div id="docker_network" class="container-fluid">
@@ -115,15 +119,15 @@
                         var c = result.images.length;
                         networkTab = {};
                         for (var i = 0; i < c; i++) {
-                            networkTab[result.images[i][0]] = result.images[i][1];
+                            networkTab[result.images[i]['ID']] = result.images[i]['Name'];
                             $('#docker_network').append('<div class="row">'+
-                                '<div class="col-1 text-nowrap text-truncate">'+result.images[i][0]+'</div>'+
-                                '<div class="col-1 text-nowrap text-truncate">'+result.images[i][1]+'</div>'+
-                                '<div class="col-1 text-nowrap text-truncate">'+result.images[i][2]+'</div>'+
-                                '<div class="col-1 text-nowrap text-truncate">'+result.images[i][3]+'</div>'+
-                                '<div class="col-1 text-nowrap text-truncate">'+result.images[i][4]+'</div>'+
-                                '<div class="col-1 text-nowrap text-truncate">'+result.images[i][5]+'</div>'+
-                                '<div class="col-1 text-nowrap text-truncate">'+result.images[i][6]+'</div>'+
+                                '<div class="col-1 text-nowrap text-truncate">'+result.images[i]['ID']+'</div>'+
+                                '<div class="col-1 text-nowrap text-truncate">'+result.images[i]['Name']+'</div>'+
+                                '<div class="col-1 text-nowrap text-truncate">'+result.images[i]['Driver']+'</div>'+
+                                '<div class="col-1 text-nowrap text-truncate">'+result.images[i]['Scope']+'</div>'+
+                                '<div class="col-1 text-nowrap text-truncate">'+result.images[i]['Internal']+'</div>'+
+                                '<div class="col-1 text-nowrap text-truncate">'+result.images[i]['Labels']+'</div>'+
+                                '<div class="col-1 text-nowrap text-truncate">'+result.images[i]['CreatedAt']+'</div>'+
                             '</div>');
                         }
                     }
@@ -138,6 +142,7 @@
                     cache: true,
                     success: function (result) {
                         var c = result.images.length;
+                        var icon = '<a href="#" class="volume_rm"><span class="oi oi-trash"></span></a>';
                         for (var i = 0; i < c; i++) {
                             $('#docker_volume').append('<div class="row">'+
                                 '<div class="col-2 text-nowrap text-truncate">'+result.images[i]['Driver']+'</div>'+
@@ -145,6 +150,7 @@
                                 '<div class="col-2 text-nowrap text-truncate">'+result.images[i]['Scope']+'</div>'+
                                 '<div class="col-2 text-nowrap text-truncate">'+result.images[i]['Mountpoint']+'</div>'+
                                 '<div class="col-2 text-nowrap text-truncate">'+result.images[i]['Labels']+'</div>'+
+                                '<div class="col-2 text-nowrap text-truncate" data-id="'+result.images[i]['Name']+'">'+icon+'</div>'+
                             '</div>');
                         }
                     }
@@ -313,6 +319,34 @@
                 });
             });
 
+            $('#docker_volume').on('click', '.volume_rm', function () {
+                var validate = confirm("Are you sure you want to remove\n\n"+$(this).parent().data('id')+"\n");
+                if (validate) {
+                    $.ajax({
+                        url: '/docker/volume/rm/'+$(this).parent().data('id'),
+                        dataType: 'json',
+                        cache: true,
+                        success: function (result) {
+                            docker_volume();
+                        }
+                    });
+                }
+            });
+            
+            $('#volume_pruneAll').on('click', function(e) {
+                e.preventDefault();
+                var validate = confirm ("Are you sure\nyou want to prune all?");
+                if (validate) {
+                    $.ajax({
+                        url: '/docker/volume/prune',
+                        dataType: 'json',
+                        cache: true,
+                        success: function (result) {
+                            docker_volume();
+                        }
+                    });
+                }
+            })
             $(function () {
                 docker_images();
             });

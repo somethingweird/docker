@@ -2,7 +2,7 @@
 I started this project because I wanted to learn Docker.  In addition to learning Docker I get to practice Nodejs / Express / Bootstrap / Open-Iconic / JQuery
 
 ## Road Map
-Sept 2017 - get a simple prototype working by the end of the month.  Make a version number
+Sept 2017 - get a simple prototype working by the end of the month.
 
 ## ScreenShot
 ![Screen Shot Docker Image](https://raw.githubusercontent.com/somethingweird/docker/master/gui/screenshots/ScreenShot_DockerImage.png)
@@ -13,11 +13,13 @@ Sept 2017 - get a simple prototype working by the end of the month.  Make a vers
 
 ## To Do
 
-- login / authentication with 2FA support (far future)
+- login / authentication with 2FA support (far future) - https://www.npmjs.com/package/node-2fa
 - websocket for docker stats - https://www.npmjs.com/package/express-ws (far future)
 - D3.js for nice data driven display eventually - https://d3js.org/ (far future)
 - use ReactJS for forms? - https://facebook.github.io/react/ (far future)
-- Always too much to do. 
+- Unit Testing
+- Make a version # for this project
+- Always too much to do.
 
 ## Requirements
 
