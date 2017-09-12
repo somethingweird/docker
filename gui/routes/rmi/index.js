@@ -5,18 +5,17 @@ var shell = require('child_process');
 
 /* GET home page. */
 router.get('/:tagId', function(req, res, next) {
-    var regex = /^\w+$/;
+    var regex = /^(\w+|sha256:\w+)$/;
     if (regex.test(req.params.tagId)) {
-        shell.execFile('docker', ['rmi', req.params.tagId], function (error, stdout, stderr) {
+        var tagId = req.params.tagId;
+        if (tagId.indexOf('sha256:') > 0) {
+            tagId = tagId.splice(7);
+        }
+        shell.execFile('docker', ['rmi', tagId], function (error, stdout, stderr) {
             if (stderr) {
                 res.json({success: false, message: error});
             } else {
-                var matchAgainst = req.params.tagId;
-                if (stdout.indexOf(matchAgainst) > -1) {
-                    res.json({success: true, message: stdout});
-                } else {
-                    res.json({success: false, message: stdout});
-                }
+                res.json({success: false, message: stdout});
             }
         });
     } else {
