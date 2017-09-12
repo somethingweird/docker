@@ -223,9 +223,9 @@
                                 '<div class="col-2 text-nowrap text-truncate">'+result.images[i]['ID']+'</div>'+
                                 '<div class="col-2 text-nowrap text-truncate">'+result.images[i]['CreatedSince']+'</div>'+
                                 '<div class="col-1 text-nowrap text-truncate">'+result.images[i]['Size']+'</div>'+
-                                '<div class="col-1 text-nowrap text-truncate">'+
+                                '<div class="col-1 text-nowrap text-truncate" data-id="'+result.images[i]['ID']+'">'+
                                     '<a href=""><span class="oi oi-cloud-download"></span></a> '+
-                                    '<a href="#" class="images_rmi" data-id="'+result.images[i]['ID']+'"><span class="oi oi-trash"></span></a> '+
+                                    '<a href="#" class="images_rmi"><span class="oi oi-trash"></span></a> '+
                                 '</div>'+
                                 '</div>');
                         };
