@@ -318,14 +318,18 @@
                 });
             });
             $('#dropin').on('click', '.images_rmi', function () {
-                $.ajax({
-                    url: '/docker/rmi/'+$(this).parent().data('id'),
-                    dataType: 'json',
-                    cache: true,
-                    success: function (result) {
-                        docker_images()
-                    }
-                });
+                e.preventDefault();
+                var validate = confirm ("Are you sure\nyou want to remove image?");
+                if (validate) {
+                    $.ajax({
+                        url: '/docker/rmi/'+$(this).parent().data('id'),
+                        dataType: 'json',
+                        cache: true,
+                        success: function (result) {
+                            docker_images()
+                        }
+                    });
+                };
             })
             $('#docker_volume').on('click', '.volume_rm', function () {
                 var validate = confirm("Are you sure you want to remove\n\n"+$(this).parent().data('id')+"\n");
