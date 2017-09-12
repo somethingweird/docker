@@ -318,7 +318,7 @@
                     }
                 });
             });
-            $('#dropin').on('click', '.image_rmi', function () {
+            $('#dropin').on('click', '.images_rmi', function () {
                 $.ajax({
                     url: '/docker/rmi/'+$(this).parent().data('id'),
                     dataType: 'json',
