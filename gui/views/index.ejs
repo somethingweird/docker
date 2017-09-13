@@ -13,13 +13,20 @@
         <% include header.ejs %>
         <div class="tab-content">
             <div class="tab-pane active" id="image" role="tabpanel">
-                <div id="dropin" class="container-fluid">
+                <div class="container-fluid">
                     <div class="row">
-                        <div class="col-2 text-nowrap text-truncate">REPOSITORY</div>
-                        <div class="col-1 text-nowrap text-truncate">TAG</div>
-                        <div class="col-2 text-nowrap text-truncate">IMAGE ID</div>
-                        <div class="col-2 text-nowrap text-truncate">CREATED</div>
-                        <div class="col-1 text-nowrap text-truncate">SIZE</div>
+                        <div class="col">
+                            <table class="table table-hover" id="image_ls">
+                                <thead><tr>
+                                    <th>REPOSITORY</th>
+                                    <th>TAG</th>
+                                    <th>CREATED</th>
+                                    <th>SIZE</th>
+                                    <th></th>
+                                </tr></thead>
+                                <tbody></tbody>
+                            </table>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -58,29 +65,45 @@
             </div>
 
             <div class="tab-pane" id="process" role="tabpanel">
-                <div id="docker_ps" class="container-fluid">
+                <div class="container-fluid">
                     <div class="row">
-                        <div class="col-1 text-nowrap text-truncate">CONTAINER ID</div>
-                        <div class="col-1 text-nowrap text-truncate">IMAGE</div>
-                        <div class="col-1 text-nowrap text-truncate">COMMAND</div>
-                        <div class="col-1 text-nowrap text-truncate">RUNNING FOR</div>
-                        <div class="col-1 text-nowrap text-truncate">PORT</div>
-                        <div class="col-1 text-nowrap text-truncate">STATUS</div>
-                        <div class="col-1 text-nowrap text-truncate">NAME</div>
-                        <div class="col-1 text-nowrap text-truncate">LABEL</div>
-                        <div class="col-1 text-nowrap text-truncate">MOUNT</div>
-                        <div class="col-1 text-nowrap text-truncate">NETWORK</div>
+                        <div class="col">
+                            <table class="table table-hover" id="docker_ps">
+                                <thead>
+                                    <tr>
+                                        <th>Command</th>
+                                        <th>Running For</th>
+                                        <th>Port</th>
+                                        <th>Status</th>
+                                        <th>Name</th>
+                                        <th>Network</th>
+                                        <th></th>
+                                    </tr>
+                                </thead>
+                                <tbody></tbody>
+                            </table>
+                        </div>
                     </div>
                 </div>
             </div>
+
             <div class="tab-pane" id="volume" role="tabpanel">
-                <div id="docker_volume" class="container-fluid">
+                <div class="container-fluid">
                     <div class="row">
-                        <div class="col-2 text-nowrap text-truncate">DRIVER</div>
-                        <div class="col-2 text-nowrap text-truncate">VOLUME NAME</div>
-                        <div class="col-2 text-nowrap text-truncate">SCOPE</div>
-                        <div class="col-2 text-nowrap text-truncate">MOUNT POINT</div>
-                        <div class="col-2 text-nowrap text-truncate">LABEL</div>
+                        <div class="col">
+                            <table class="table table-hover" id="docker_volume">
+                                <thead>
+                                    <tr>
+                                        <th>Driver</th>
+                                        <th>Volume Name</th>
+                                        <th>Scope</th>
+                                        <th>Mount Point</th>
+                                        <th>Label</th>
+                                    </tr>
+                                </thead>
+                                <tbody></tbody>
+                            </table>
+                        </div>
                     </div>
                 </div>
                 <div class="row">&nbsp</div>
@@ -88,16 +111,25 @@
                     <div class="col"><button id="volume_pruneAll" type="button" class="btn btn-primary">Prune All</button></div>
                 </div>
             </div>
+
             <div class="tab-pane" id="network" role="tabpanel">
-                <div id="docker_network" class="container-fluid">
+                <div class="container-fluid">
                     <div class="row">
-                        <div class="col-1 text-nowrap text-truncate">CONTAINER ID</div>
-                        <div class="col-1 text-nowrap text-truncate">NAME</div>
-                        <div class="col-1 text-nowrap text-truncate">DRIVER</div>
-                        <div class="col-1 text-nowrap text-truncate">SCOPE</div>
-                        <div class="col-1 text-nowrap text-truncate">INTERNAL</div>
-                        <div class="col-1 text-nowrap text-truncate">LABEL</div>
-                        <div class="col-1 text-nowrap text-truncate">CREATE AT</div>
+                        <div class="col">
+                            <table class="table table-hover" id="docker_network">
+                                <thead>
+                                    <tr>
+                                        <th>Name</th>
+                                        <th>Driver</th>
+                                        <th>Score</th>
+                                        <th>Internal</th>
+                                        <th>Label</th>
+                                        <th>Create At</th>
+                                    </tr>
+                                </thead>
+                                <tbody></tbody>
+                            </table>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -108,75 +140,71 @@
             var networkTag = {};
 
             function docker_network(params) {
-                $('#docker_network .row').not('.row:first').remove();
+                $('#docker_network tbody').empty();
+                networkTab = {};
                 $.ajax({
                     url: '/docker/network/ls',
                     dataType: 'json',
                     cache: true,
                     async: params.async,
                     success: function (result) {
-                        var c = result.images.length;
-                        networkTab = {};
-                        for (var i = 0; i < c; i++) {
-                            networkTab[result.images[i]['ID']] = result.images[i]['Name'];
-                            $('#docker_network').append('<div class="row">'+
-                                '<div class="col-1 text-nowrap text-truncate">'+result.images[i]['ID']+'</div>'+
-                                '<div class="col-1 text-nowrap text-truncate">'+result.images[i]['Name']+'</div>'+
-                                '<div class="col-1 text-nowrap text-truncate">'+result.images[i]['Driver']+'</div>'+
-                                '<div class="col-1 text-nowrap text-truncate">'+result.images[i]['Scope']+'</div>'+
-                                '<div class="col-1 text-nowrap text-truncate">'+result.images[i]['Internal']+'</div>'+
-                                '<div class="col-1 text-nowrap text-truncate">'+result.images[i]['Labels']+'</div>'+
-                                '<div class="col-1 text-nowrap text-truncate">'+result.images[i]['CreatedAt']+'</div>'+
-                            '</div>');
-                        }
+                        result.images.map(function (row) {
+                            networkTab[row['ID']] = row['Name'];
+                            $('#docker_network tbody').append('<tr data-id="'+row['ID']+'">'+
+                                '<td>'+row['Name']+'</td>'+
+                                '<td>'+row['Driver']+'</td>'+
+                                '<td>'+row['Scope']+'</td>'+
+                                '<td>'+row['Internal']+'</td>'+
+                                '<td>'+row['Labels']+'</td>'+
+                                '<td>'+row['CreatedAt']+'</td>'+
+                            '</tr>');
+                        });
                     }
                 })
             }
 
             function docker_volume() {
-                $('#docker_volume .row').not('.row:first').remove();
+                $('#docker_volume tbody').empty();
                 $.ajax({
                     url: '/docker/volume/ls',
                     dataType: 'json',
                     cache: true,
                     success: function (result) {
-                        var c = result.images.length;
-                        var icon = '<a href="#" class="volume_rm"><span class="oi oi-trash"></span></a>';
-                        for (var i = 0; i < c; i++) {
-                            $('#docker_volume').append('<div class="row">'+
-                                '<div class="col-2 text-nowrap text-truncate">'+result.images[i]['Driver']+'</div>'+
-                                '<div class="col-2 text-nowrap text-truncate">'+result.images[i]['Name']+'</div>'+
-                                '<div class="col-2 text-nowrap text-truncate">'+result.images[i]['Scope']+'</div>'+
-                                '<div class="col-2 text-nowrap text-truncate">'+result.images[i]['Mountpoint']+'</div>'+
-                                '<div class="col-2 text-nowrap text-truncate">'+result.images[i]['Labels']+'</div>'+
-                                '<div class="col-2 text-nowrap text-truncate" data-id="'+result.images[i]['Name']+'">'+icon+'</div>'+
-                            '</div>');
-                        }
+                        result.images.map(function (row) {
+                            var icon = '<a href="#" class="volume_rm"><span class="oi oi-trash"></span></a>';
+                            $('#docker_volume tbody').append('<tr>'+
+                                '<td>'+row['Driver']+'</td>'+
+                                '<td>'+row['Name']+'</td>'+
+                                '<td>'+row['Scope']+'</td>'+
+                                '<td>'+row['Mountpoint']+'</td>'+
+                                '<td>'+row['Labels']+'</td>'+
+                                '<td data-id="'+row['Name']+'">'+icon+'</td>'+
+                            '</tr>')
+                        });
                     }
-                });
+                })
             }
 
             function docker_ps() {
-                $('#docker_ps .row').not('.row:first').remove();
+                $('#docker_ps tbody').empty();
                 $.ajax({
-                    url: '/docker/ps/all/',
+                    url: '/docker/ps/all',
                     dataType: 'json',
                     cache: true,
                     success: function (result) {
-                        var c = result.images.length;
-                        var exit_regex = /^Exited \(0\)/;
-                        var up_regex = /^Up /;
-                        var pause_regex = /^Up\s.+\s\(Paused\)$/;
-                        for (var i = 0; i < c; i++) {
+                        result.images.map(function (row) {
                             var warning = '';
-                            var icon = '<span class="oi oi-reload"></span> <span class="oi oi-media-play"></span> <span class="oi oi-media-stop"></span> <span class="oi oi-media-pause"></span> <span class="oi oi-trash"></span>'
-                            if (exit_regex.test(result.images[i]['Status'])) {
+                            var icon = '<span class="oi oi-reload"></span> <span class="oi oi-media-play"></span> <span class="oi oi-media-stop"></span> <span class="oi oi-media-pause"></span> <span class="oi oi-trash"></span>';
+                            var exit_regex = /^Exited \(0\)/;
+                            var up_regex = /^Up /;
+                            var pause_regex = /^Up\s.+\s\(Paused\)$/;
+                            if (exit_regex.test(row['Status'])) {
                                 warning = 'alert alert-danger';
                                 icon = '<a href="#" class="process_reload"><span title="reload" class="oi oi-reload"></span></a> <a href="#" class="process_kill"><span title="remove" class="oi oi-trash"></span></a>';
                             };
 
-                            if (up_regex.test(result.images[i]['Status'])) {
-                                if (pause_regex.test(result.images[i]['Status'])) {
+                            if (up_regex.test(row['Status'])) {
+                                if (pause_regex.test(row['Status'])) {
                                     warning = 'alert alert-warning';
                                     icon = '<a href="#"><span title="play" class="oi oi-media-play"></span></a>';
                                 } else {
@@ -184,50 +212,44 @@
                                     icon = '<a href="#" class="process_reload"><span title="reload" class="oi oi-reload"></span></a> <a href="#" class="process_stop"><span title="stop" class="oi oi-media-stop"></span></a> <a href="#" class="process_pause"><span title="suspend" class="oi oi-media-pause"></span></a></span>';
                                 }
                             };
-
-                            $('#docker_ps').append('<div class="row '+warning+'">'+
-                                '<div class="col-1 text-nowrap text-truncate"><span title="'+result.images[i]['ID']+'">'+result.images[i]['ID']+'</span></div>'+
-                                '<div class="col-1 text-nowrap text-truncate"><span title="'+result.images[i]['Image']+'">'+result.images[i]['Image']+'</span></div>'+
-                                '<div class="col-1 text-nowrap text-truncate"><span title="">'+result.images[i]['Command']+'</span></div>'+
-                                '<div class="col-1 text-nowrap text-truncate"><span title="'+result.images[i]['RunningFor']+'">'+result.images[i]['RunningFor']+'</span></div>'+
-                                '<div class="col-1 text-nowrap text-truncate"><span title="'+result.images[i]['Ports']+'">'+result.images[i]['Ports']+'</span></div>'+
-                                '<div class="col-1 text-nowrap text-truncate"><span title="'+result.images[i]['Status']+'"'+result.images[i]['Status']+'</span></div>'+
-                                '<div class="col-1 text-nowrap text-truncate"><span title="'+result.images[i]['Names']+'">'+result.images[i]['Names']+'</span></div>'+
-                                '<div class="col-1 text-nowrap text-truncate"><span title="'+result.images[i]['Labels']+'">'+result.images[i]['Labels']+'</span></div>'+
-                                '<div class="col-1 text-nowrap text-truncate"><span title="'+result.images[i]['Mounts']+'">'+result.images[i]['Mounts']+'</span></div>'+
-                                '<div class="col-1 text-nowrap text-truncate"><span title="'+result.images[i]['Networks']+'">'+result.images[i]['Networks']+'</span></div>'+
-                                '<div class="col-1 text-nowrap text-truncate" data-id="'+result.images[i]['ID']+'">'+icon+'</div>'+
-                            '</div>');
-                        }
+                            $('#docker_ps tbody').append(
+                                '<tr class="'+warning+'">'+
+                                    '<td class="text-nowrap">'+row['Command']+'</td>'+
+                                    '<td class="text-nowrap">'+row['RunningFor']+'</td>'+
+                                    '<td>'+row['Ports']+'</td>'+
+                                    '<td>'+row['Status']+'</td>'+
+                                    '<td>'+row['Names']+'</td>'+
+                                    '<td>'+row['Networks']+'</td>'+
+                                    '<td data-id="'+row['ID']+'">'+icon+'</td>'+
+                                '</tr>'
+                            );
+                        });
                     }
                 });
             };
 
             function docker_images() {
-                $('#dropin .row').not('.row:first').remove();
+                $('#image_ls tbody').empty();
                 $.ajax({
-                    url: '/docker/images/',
+                    url: '/docker/images',
                     dataType: 'json',
                     cache: true,
                     success: function (result) {
-                        // REPOSITORY-TAG-IMAGE ID-CREATED-SIZE
-                        var c = result.images.length;
                         imageTab = {};
-                        for (var i = 0; i < c; i++) {
-                            imageTab[result.images[i]['ID']] = result.images[i]['Repository']+':'+result.images[i]['Tag'];
-                            $('#dropin').append(
-                                '<div class="row">'+
-                                '<div class="col-2 text-nowrap text-truncate">'+result.images[i]['Repository']+'</div>'+
-                                '<div class="col-1 text-nowrap text-truncate">'+result.images[i]['Tag']+'</div>'+
-                                '<div class="col-2 text-nowrap text-truncate">'+result.images[i]['ID']+'</div>'+
-                                '<div class="col-2 text-nowrap text-truncate">'+result.images[i]['CreatedSince']+'</div>'+
-                                '<div class="col-1 text-nowrap text-truncate">'+result.images[i]['Size']+'</div>'+
-                                '<div class="col-1 text-nowrap text-truncate" data-id="'+result.images[i]['ID']+'">'+
-                                    '<a href=""><span class="oi oi-cloud-download"></span></a> '+
-                                    '<a href="#" class="images_rmi"><span class="oi oi-trash"></span></a> '+
-                                '</div>'+
-                                '</div>');
-                        };
+                        result.images.map(function (row) {
+                            imageTab[row['ID']] = row['Repository']+':'+row['Tag'];
+                            var icons =
+                                '<span class="oi oi-cloud-download"></span> '+
+                                '<a href="#" class="images_rmi"><span class="oi oi-trash"></span></a>';
+
+                            $('#image_ls tbody').append('<tr>'+
+                                '<td>'+row['Repository']+'</td>'+
+                                '<td>'+row['Tag']+'</td>'+
+                                '<td class="text-nowrap">'+row['CreatedAt']+'</td>'+
+                                '<td>'+row['Size']+'</td>'+
+                                '<td class="text-nowrap" data-id="'+row['ID']+'">'+icons+'</td>'
+                                +'</tr>');
+                        });
                     }
                 });
             };
@@ -317,7 +339,7 @@
                     }
                 });
             });
-            $('#dropin').on('click', '.images_rmi', function (e) {
+            $('#image_ls').on('click', '.images_rmi', function (e) {
                 e.preventDefault();
                 var validate = confirm ("Are you sure\nyou want to remove image?");
                 if (validate) {
