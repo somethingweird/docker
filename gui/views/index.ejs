@@ -206,7 +206,7 @@
                             if (up_regex.test(row['Status'])) {
                                 if (pause_regex.test(row['Status'])) {
                                     warning = 'alert alert-warning';
-                                    icon = '<a href="#"><span title="play" class="oi oi-media-play"></span></a>';
+                                    icon = '<a href="#" class="process_unpause"><span title="play" class="oi oi-media-play"></span></a>';
                                 } else {
                                     warning = 'alert alert-success';
                                     icon = '<a href="#" class="process_reload"><span title="reload" class="oi oi-reload"></span></a> <a href="#" class="process_stop"><span title="stop" class="oi oi-media-stop"></span></a> <a href="#" class="process_pause"><span title="suspend" class="oi oi-media-pause"></span></a></span>';
@@ -339,6 +339,18 @@
                     }
                 });
             });
+
+            $('#docker_ps').on('click', '.process_unpause', function () {
+                $.ajax({
+                    url: '/docker/unpause/'+$(this).parent().data('id'),
+                    dataType: 'json',
+                    cache: true,
+                    success: function (result) {
+                        docker_ps();
+                    }
+                });
+            });
+
             $('#image_ls').on('click', '.images_rmi', function (e) {
                 e.preventDefault();
                 var validate = confirm ("Are you sure\nyou want to remove image?");
