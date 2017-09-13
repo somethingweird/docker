@@ -8,6 +8,7 @@ var bodyParser = require('body-parser');
 var index = require('./routes/index');
 
 var images = require('./routes/images/index');
+var system = require('./routes/system/index');
 var volume = require('./routes/volume/index');
 var process = require('./routes/ps/index');
 var network = require('./routes/network/index');
@@ -44,6 +45,7 @@ app.use('/docker/stop', stop);
 app.use('/docker/pause', pause);
 app.use('/docker/run', run);
 app.use('/docker/restart', restart);
+app.use('/docker/system', system);
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {
