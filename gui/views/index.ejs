@@ -50,6 +50,15 @@
                     </div>
                     <div class="row">&nbsp;</div>
                     <div class="row">
+                        <label for="cpus" class="col-1 col-form-label">CPUS:</label>
+                        <div class="col-2 text-nowrap text-truncate">
+                            <select id="run_cpus" class="form-control">
+                                <option hidden>Select One</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="row">&nbsp;</div>
+                    <div class="row">
                         <div class="col-1 text-nowrap text-truncate"><input class="form-control" type="checkbox" id="rm"></div>
                         <label for="rm" class="col-3 form-check-label">Remove process when exited</label>
                     </div>
@@ -138,6 +147,7 @@
         <script>
             var imageTag = {};
             var networkTag = {};
+            var cpus = 0;
 
             function docker_network(params) {
                 $('#docker_network tbody').empty();
@@ -195,7 +205,7 @@
                         result.images.map(function (row) {
                             var warning = '';
                             var icon = '<span class="oi oi-reload"></span> <span class="oi oi-media-play"></span> <span class="oi oi-media-stop"></span> <span class="oi oi-media-pause"></span> <span class="oi oi-trash"></span>';
-                            var exit_regex = /^Exited \(0\)/;
+                            var exit_regex = /^Exited \(\d+\)/;
                             var up_regex = /^Up /;
                             var pause_regex = /^Up\s.+\s\(Paused\)$/;
                             if (exit_regex.test(row['Status'])) {
@@ -220,7 +230,7 @@
                                     '<td>'+row['Status']+'</td>'+
                                     '<td>'+row['Names']+'</td>'+
                                     '<td>'+row['Networks']+'</td>'+
-                                    '<td data-id="'+row['ID']+'">'+icon+'</td>'+
+                                    '<td class="text-nowrap" data-id="'+row['ID']+'">'+icon+'</td>'+
                                 '</tr>'
                             );
                         });
@@ -272,7 +282,13 @@
                     if (networkTab.hasOwnProperty(k)) {
                         $('#run_network').append($('<option>', {value: k, text: networkTab[k]}));
                     }
-                }
+                };
+
+                $('#run_cpus option').not(':first').remove();
+                for (var i = 0; i < cpus; i++) {
+                    var c = i + 1;
+                    $('#run_cpus').append($('<option>', {value: c, text: c}));
+                };
 
             };
 
@@ -289,6 +305,7 @@
                     cache: true,
                     success: function (result) {
                         console.log(result);
+                        alert(result.message);
                     }
                 })
             });
@@ -395,6 +412,14 @@
             })
             $(function () {
                 docker_images();
+                $.ajax({
+                    url: '/docker/system/cpus',
+                    dataType: 'json',
+                    cache: true,
+                    success: function(result) {
+                        cpus = result.cpus;
+                    }
+                })
             });
         </script>
         <script src="/javascripts/popper.js/dist/umd/popper.min.js"></script>

@@ -5,19 +5,29 @@ var logger = require('morgan');
 var cookieParser = require('cookie-parser');
 var bodyParser = require('body-parser');
 
-var index = require('./routes/index');
+var plugins = {
+    index:  './routes/index',
+    system: './routes/system/index',
+    images: './routes/images/index',
+    volume: './routes/volume/index',
+    ps: './routes/ps/index',
+    network: './routes/network/index',
+    rm: './routes/rm/index',
+    rmi: './routes/rmi/index',
+    stop: './routes/stop/index',
+    pause: './routes/pause/index',
+    run: './routes/run/index',
+    unpause: './routes/unpause/index',
+    restart: './routes/restart/index'
+};
 
-var images = require('./routes/images/index');
-var system = require('./routes/system/index');
-var volume = require('./routes/volume/index');
-var process = require('./routes/ps/index');
-var network = require('./routes/network/index');
-var rm = require('./routes/rm/index');
-var rmi = require('./routes/rmi/index');
-var stop = require('./routes/stop/index');
-var pause = require('./routes/pause/index');
-var run = require('./routes/run/index');
-var restart = require('./routes/restart/index');
+var load_plugin = {};
+for (var key in plugins) {
+    if (plugins.hasOwnProperty(key)) {
+        console.log('Loading Plugins: '+ key + "\n");
+        load_plugin[key] = require(plugins[key]);
+    };
+}
 
 var app = express();
 
@@ -33,19 +43,15 @@ app.use(bodyParser.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
 
-app.use('/', index);
+app.use('/', load_plugin['index']);
 app.use('/font', express.static(__dirname + '/node_modules/open-iconic/font'));
-app.use('/docker/images', images);
-app.use('/docker/volume', volume);
-app.use('/docker/ps', process);
-app.use('/docker/network', network);
-app.use('/docker/rm', rm);
-app.use('/docker/rmi', rmi);
-app.use('/docker/stop', stop);
-app.use('/docker/pause', pause);
-app.use('/docker/run', run);
-app.use('/docker/restart', restart);
-app.use('/docker/system', system);
+for (var key in load_plugin) {
+    if (key === 'index') { continue };
+    if (load_plugin.hasOwnProperty(key)) {
+        console.log('Hooking Plugins: '+ key + "\n");
+        app.use('/docker/'+key, load_plugin[key]);
+    }
+}
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {

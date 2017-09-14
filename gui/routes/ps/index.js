@@ -14,4 +14,7 @@ router.get('/all', function(req, res, next) {
     });
 });
 
+router.get('/', function (req, res, next) {
+    res. json({success: true});
+});
 module.exports = router;
