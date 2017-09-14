@@ -21,12 +21,6 @@ Sept 2017 - get a simple prototype working by the end of the month.
 - Make a version # for this project
 - Always too much to do.
 
-## Issues
-NodeJS doesn't seem to have an actual way to detect logically core vs physical core.
-Docker only used actual physical cores.. so on my laptop I have 4 physical cores but because of hyper threading it's 8 - Fixed
-
-
-
 ## Requirements
 
 1. nodejs - https://nodejs.org/en/
