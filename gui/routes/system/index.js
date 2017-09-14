@@ -17,6 +17,9 @@ router.get('/df', function(req, res, next) {
 });
 
 router.get('/cpus', function (req, res, next) {
-    res.json({cpus: os.cpus().length});
+    shell.execFile('docker', ['info','--format', '{{.NCPU}}'], function (error, stdout, stderr) {
+        var c = stdout.replace(/[\r\n]+/g, '');
+        res.json({cpus: c});
+    });
 })
 module.exports = router;
