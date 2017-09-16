@@ -11,7 +11,7 @@ router.get('/', function(req, res, next) {
 router.get('/docker/:command/:subcommand?', function(req, res, next) {
     console.log(res.headersSent);
     console.log(req.params);
-    docker_params = [];
+    var docker_params = [];
     switch(req.params['command']) {
         // docker images
         case 'images':
@@ -24,8 +24,6 @@ router.get('/docker/:command/:subcommand?', function(req, res, next) {
                 case 'ls':
                     docker_params = ['network', 'ls', '--format', '{{json .}}', '--no-trunc'];
                     break;
-                default:
-                    next();
             };
             break;
 
@@ -35,8 +33,21 @@ router.get('/docker/:command/:subcommand?', function(req, res, next) {
                 case 'all':
                     docker_params = ['ps', '-a', '--format', '{{json .}}', '--no-trunc'];
                     break;
-                default:
-                    next();
+            };
+            break;
+
+        // docker system
+        case 'system':
+            switch (req.params['subcommand']) {
+                case 'cpu':
+                    docker_params = ['info', '--format', '{{.NCPU}}'];
+                    break;
+                case 'df':
+                    docker_params = ['df', '--format', '{{json .}}'];
+                    break;
+                case 'info':
+                    docker_params = ['system', 'info', '--format', '{{json .}}'];
+                    break;
             };
             break;
 
@@ -46,8 +57,6 @@ router.get('/docker/:command/:subcommand?', function(req, res, next) {
                 case 'ls':
                     docker_params = ['volume', 'ls', '--format', '{{json .}}'];
                     break;
-                default:
-                    next();
             }
             break;
     };

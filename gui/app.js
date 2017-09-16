@@ -7,7 +7,6 @@ var bodyParser = require('body-parser');
 
 var plugins = {
     index:  './routes/index',
-    system: './routes/system/index',
     rm: './routes/rm/index',
     rmi: './routes/rmi/index',
     stop: './routes/stop/index',
