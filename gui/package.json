@@ -16,7 +16,7 @@
   "version": "0.0.0",
   "private": true,
   "scripts": {
-    "start": "./node_modules/pm2/bin/pm2 -i 0 start ./bin/www --watch --name docker_gui"
+    "start": "./node_modules/pm2/bin/pm2 start ./bin/www --watch --name docker_gui"
   },
   "dependencies": {
     "body-parser": "~1.17.1",

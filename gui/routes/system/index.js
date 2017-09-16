@@ -4,9 +4,25 @@ var router = express.Router();
 var shell = require('child_process');
 const os = require('os');
 
-/* GET home page. */
-router.get('/df', function(req, res, next) {
-    shell.execFile('docker', ['ps', '-a', '--format', '{{json .}}', '--no-trunc'], function (error, stdout, stderr) {
+
+router.get('/:command', function (req, res, next) {
+    switch(req.params['command']) {
+        case 'cpu':
+            docker_params = ['info', '--format', '{{.NCPU}}'];
+            break;
+
+        case 'df':
+            docker_params = ['df', '--format', '{{json .}}'];
+            break;
+
+        case 'info':
+            docker_params = ['system', 'info', '--format', '{{json .}}'];
+            break;
+
+        default:
+            next();
+    };
+    shell.execFile('docker', docker_params, function (error, stdout, stderr) {
         var rows = stdout.split("\n");
         rows.pop();
         var j = rows.map(function (x) {
@@ -16,10 +32,4 @@ router.get('/df', function(req, res, next) {
     });
 });
 
-router.get('/cpus', function (req, res, next) {
-    shell.execFile('docker', ['info','--format', '{{.NCPU}}'], function (error, stdout, stderr) {
-        var c = stdout.replace(/[\r\n]+/g, '');
-        res.json({cpus: c});
-    });
-})
 module.exports = router;

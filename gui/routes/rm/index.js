@@ -14,12 +14,15 @@ router.get('/:tagId', function(req, res, next) {
         shell.execFile('docker', ['rm', tagId], function (error, stdout, stderr) {
             if (stderr) {
                 res.json({success: false, message: error});
+                res.end();
             } else {
                 res.json({success: true, message: stdout});
+                res.end();
             }
         });
     } else {
         res.json({success: false});
+        res.end();
     }
 });
 
