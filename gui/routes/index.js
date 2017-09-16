@@ -27,6 +27,14 @@ router.get('/docker/:command/:subcommand?', function(req, res, next) {
             };
             break;
 
+        case 'plugin':
+            switch (req.params['subcommand']) {
+                case 'ls':
+                    docker_params = ['plugin', 'ls', '--format', '{{json .}}', '--no-trunc'];
+                    break;
+            };
+            break;
+
         // docker ps -a
         case 'ps':
             switch (req.params['subcommand']) {
