@@ -1,13 +1,25 @@
 {
   "name": "gui",
+  "author": {
+    "name": "Henry Wong",
+    "email": "somethingweird@yahoo.com"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/somethingweird/docker"
+  },
+  "description": "docker gui",
+  "bugs": {
+    "url": "https://github.com/somethingweird/docker/issues",
+    "email": "hwongny@gmail.com"
+  },
   "version": "0.0.0",
   "private": true,
   "scripts": {
-    "start": "./node_modules/pm2/bin/pm2 start ./bin/www --watch --name docker_gui"
+    "start": "./node_modules/pm2/bin/pm2 -i 0 start ./bin/www --watch --name docker_gui"
   },
   "dependencies": {
     "body-parser": "~1.17.1",
-    "bootstrap": "^4.0.0-beta",
     "cookie-parser": "~1.4.3",
     "debug": "~2.6.3",
     "ejs": "~2.5.6",
