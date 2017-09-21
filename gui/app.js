@@ -13,7 +13,8 @@ var plugins = {
     pause: './routes/pause/index',
     run: './routes/run/index',
     unpause: './routes/unpause/index',
-    restart: './routes/restart/index'
+    restart: './routes/restart/index',
+    volume: './routes/volume/index'
 };
 
 var load_plugin = {};
